@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Wrapper from "../assets/wrappers/NewsletterPage";
+import { toast } from "react-toastify";
 
 const Newsletter = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const Newsletter = () => {
       lastName: "",
       email: "",
     });
+    toast.success("added successfully to newsletter");
   };
 
   return (
