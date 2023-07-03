@@ -16,8 +16,7 @@ const Wrapper = styled.article`
   }
   .footer {
     padding: 1.5rem;
-    h4,
-    h5 {
+    h4, h5 {
       margin-bottom: 0.5rem;
     }
     h4 {
