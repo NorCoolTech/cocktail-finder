@@ -1,67 +1,77 @@
 import React, { useState } from "react";
 import Wrapper from "../assets/wrappers/NewsletterPage";
 import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  lastName: Yup.string().required("Last Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+});
 
 const Newsletter = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    lastName: "",
-    email: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    localStorage.setItem("formData", JSON.stringify(formData));
-    setFormData({
+  const formik = useFormik({
+    initialValues: {
       name: "",
       lastName: "",
       email: "",
-    });
-    toast.success("added successfully to newsletter");
-  };
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      localStorage.setItem("formData", JSON.stringify(values));
+      formik.resetForm();
+      toast.success("Added successfully to newsletter");
+    },
+  });
 
   return (
     <Wrapper>
-      <div>
-        <h5>Our Newsletter</h5>
-        <form className="form" onSubmit={handleSubmit}>
-          <label className="form-label form-row">Name</label>
-          <input
-            className="form-input form-row"
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
+      <form className="form" onSubmit={formik.handleSubmit}>
+        <h4>Our Newsletter</h4>
+        <label className="form-label form-row">Name</label>
+        <input
+          className="form-input form-row"
+          type="text"
+          name="name"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+        />
+        {formik.errors.name && formik.touched.name && (
+          <div className="error">{formik.errors.name}</div>
+        )}
 
-          <label className="form-label form-row">Last Name</label>
-          <input
-            className="form-input form-row"
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
+        <label className="form-label form-row">Last Name</label>
+        <input
+          className="form-input form-row"
+          type="text"
+          name="lastName"
+          value={formik.values.lastName}
+          onChange={formik.handleChange}
+        />
+        {formik.errors.lastName && formik.touched.lastName && (
+          <div className="error">{formik.errors.lastName}</div>
+        )}
 
-          <label className="form-label">Email</label>
-          <input
-            className="form-input form-row"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <button className="btn" type="submit">
-            Submit
-          </button>
-        </form>
-      </div>
+        <label className="form-label">Email</label>
+        <input
+          className="form-input form-row"
+          type="email"
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+        />
+        {formik.errors.email && formik.touched.email && (
+          <div className="error">{formik.errors.email}</div>
+        )}
+
+        <button className="btn" type="submit">
+          Submit
+        </button>
+      </form>
     </Wrapper>
   );
 };
+
 
 export default Newsletter;

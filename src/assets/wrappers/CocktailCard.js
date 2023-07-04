@@ -9,14 +9,19 @@ const Wrapper = styled.article`
   :hover {
     box-shadow: var(--shadow-4);
   }
+  .img-container {
+    scroll-snap-type: y mandatory;
+  }
   img {
     height: 15rem;
     border-top-left-radius: var(--borderRadius);
     border-top-right-radius: var(--borderRadius);
+    scroll-snap-align: center;
   }
   .footer {
     padding: 1.5rem;
-    h4, h5 {
+    h4,
+    h5 {
       margin-bottom: 0.5rem;
     }
     h4 {
