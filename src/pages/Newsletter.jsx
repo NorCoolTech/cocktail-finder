@@ -10,6 +10,20 @@ const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
 });
 
+const isDuplicateForm = (values) => {
+
+  const savedFormData = JSON.parse(localStorage.getItem("formData"));
+  if (savedFormData) {
+    return (
+      values.name === savedFormData.name &&
+      values.lastName === savedFormData.lastName &&
+      values.email === savedFormData.email
+    );
+  }
+  return false;
+};
+
+
 const Newsletter = () => {
   const formik = useFormik({
     initialValues: {
@@ -19,9 +33,15 @@ const Newsletter = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      localStorage.setItem("formData", JSON.stringify(values));
-      formik.resetForm();
-      toast.success("Added successfully to newsletter");
+      if (isDuplicateForm(values)) {
+        toast.warning(
+          "The exact same values are already saved for the newsletter"
+        );
+      } else {
+        localStorage.setItem("formData", JSON.stringify(values));
+        formik.resetForm();
+        toast.success("Added successfully to the newsletter");
+      }
     },
   });
 
@@ -29,7 +49,13 @@ const Newsletter = () => {
     <Wrapper>
       <form className="form" onSubmit={formik.handleSubmit}>
         <h4>Our Newsletter</h4>
-        <label className="form-label form-row">Name</label>
+        {formik.errors.name && formik.touched.name ? (
+          <label className="form-label form-row error">
+            {formik.errors.name}
+          </label>
+        ) : (
+          <label className="form-label form-row">Name</label>
+        )}
         <input
           className="form-input form-row"
           type="text"
@@ -37,11 +63,14 @@ const Newsletter = () => {
           value={formik.values.name}
           onChange={formik.handleChange}
         />
-        {formik.errors.name && formik.touched.name && (
-          <div className="error">{formik.errors.name}</div>
-        )}
 
-        <label className="form-label form-row">Last Name</label>
+        {formik.errors.lastName && formik.touched.lastName ? (
+          <label className="form-label form-row error">
+            {formik.errors.lastName}
+          </label>
+        ) : (
+          <label className="form-label form-row">Last Name</label>
+        )}
         <input
           className="form-input form-row"
           type="text"
@@ -49,11 +78,14 @@ const Newsletter = () => {
           value={formik.values.lastName}
           onChange={formik.handleChange}
         />
-        {formik.errors.lastName && formik.touched.lastName && (
-          <div className="error">{formik.errors.lastName}</div>
-        )}
 
-        <label className="form-label">Email</label>
+        {formik.errors.email && formik.touched.email ? (
+          <label className="form-label form-row error">
+            {formik.errors.email}
+          </label>
+        ) : (
+          <label className="form-label form-row">Last Name</label>
+        )}
         <input
           className="form-input form-row"
           type="email"
@@ -61,9 +93,6 @@ const Newsletter = () => {
           value={formik.values.email}
           onChange={formik.handleChange}
         />
-        {formik.errors.email && formik.touched.email && (
-          <div className="error">{formik.errors.email}</div>
-        )}
 
         <button className="btn" type="submit">
           Submit
