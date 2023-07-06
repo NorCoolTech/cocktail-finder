@@ -3,7 +3,7 @@ import Wrapper from "../assets/wrappers/NewsletterPage";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -12,7 +12,6 @@ const validationSchema = Yup.object({
 });
 
 const isDuplicateForm = (values) => {
-
   const savedFormData = JSON.parse(localStorage.getItem("formData"));
   if (savedFormData) {
     return (
@@ -24,8 +23,8 @@ const isDuplicateForm = (values) => {
   return false;
 };
 
-
 const Newsletter = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -42,7 +41,9 @@ const Newsletter = () => {
         localStorage.setItem("formData", JSON.stringify(values));
         formik.resetForm();
         toast.success("Added successfully to the newsletter");
-        return redirect("/");
+        setTimeout(() => {
+          navigate("/"); 
+        }, 2500); 
       }
     },
   });
@@ -112,6 +113,5 @@ const Newsletter = () => {
     </Wrapper>
   );
 };
-
 
 export default Newsletter;
