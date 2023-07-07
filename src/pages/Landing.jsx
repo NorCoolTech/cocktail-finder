@@ -18,20 +18,16 @@ const searchCoctailsQuery = (searchTerm) => {
 const cocktailSearchUrl =
   "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
 
-export const loader = async ({ request }) => {
+export const loader = (queryClient) => async ({ request }) => {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("search") || "";
-
+  await queryClient.ensureQueryData(searchCoctailsQuery(searchTerm));
   return {searchTerm}
 };
 
 const Landing = () => {
   const {searchTerm } = useLoaderData();
-  const { data: drinks, isLoading } = useQuery(searchCoctailsQuery(searchTerm))
-  
-  if (isLoading) {
-    return <h4>Loading...</h4>
-  }
+  const { data: drinks } = useQuery(searchCoctailsQuery(searchTerm))
 
 
   return (

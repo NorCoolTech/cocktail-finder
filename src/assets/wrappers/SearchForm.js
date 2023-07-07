@@ -1,12 +1,20 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   margin-bottom: 6rem;
   .form {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .title-search {
+    grid-column: 1 / span 3;
+    font-size: 1.2rem;
+    text-transform: none;
   }
   .form-input {
+    grid-column: 1 / span 2; 
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     color: var(--primary-900);

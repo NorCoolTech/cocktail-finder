@@ -2,21 +2,35 @@ import React from "react";
 import { useLoaderData, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import Wrapper from "../assets/wrappers/CocktailPage";
+import { useQuery } from "@tanstack/react-query";
+
+const singleCoctailQuery = (id) => {
+  return {
+    queryKey: ["coctail", id],
+    queryFn: async () => {
+      const { data } = await axios.get(`${singleCoctailUrl}${id}`);
+      return data;
+    },
+  };
+};
 
 const singleCoctailUrl =
   "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
 
-export const loader = async ({ params }) => {
-  const { id } = params;
-  const { data } = await axios.get(`${singleCoctailUrl}${id}`);
-  return { id, data };
-};
-
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    const { id } = params;
+    await queryClient.ensureQueryData(singleCoctailQuery(id));
+    return { id };
+  };
 
 const Cocktail = () => {
-  const { id, data } = useLoaderData();
+  const { id } = useLoaderData();
 
-  if(!data) return <Navigate to="/" />
+  const { data } = useQuery(singleCoctailQuery(id));
+
+  if (!data) return <Navigate to="/" />;
 
   const singleDrink = data.drinks[0];
 

@@ -9,6 +9,9 @@ const SearchForm = ({searchTerm}) => {
   return (
     <Wrapper>
       <Form className="form">
+        <h4 className="title-search">
+          Find a cocktail with one of your favorite drinks
+        </h4>
         <input
           type="search"
           name="search"
