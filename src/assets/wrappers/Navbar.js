@@ -35,6 +35,10 @@ const Wrapper = styled.nav`
     color: var(--primary-500);
   }
 
+  .pending {
+    color: var(--red-dark);
+  }
+
   @media (min-width: 768px) {
     .nav-center {
       flex-direction: row;

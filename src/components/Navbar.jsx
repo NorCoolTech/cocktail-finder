@@ -1,8 +1,10 @@
-import React from "react";
+
 import { NavLink } from "react-router-dom";
 import Wrapper from "../assets/wrappers/Navbar";
 
 const Navbar = () => {
+
+
   return (
     <Wrapper>
       <div className="nav-center">
@@ -14,7 +16,12 @@ const Navbar = () => {
           <NavLink to="/about" className="nav-link">
             About
           </NavLink>
-          <NavLink to="/newsletter" className="nav-link">
+          <NavLink
+            to="/newsletter"
+            className={({ isActive, isPending }) =>
+              `nav-link ${isPending ? "pending" : isActive ? "active" : ""}`
+            }
+          >
             Newsletter
           </NavLink>
         </div>
