@@ -94,7 +94,7 @@ const Newsletter = () => {
           </label>
         ) : (
           <label className="form-label form-row" htmlFor="email">
-            Last Name
+            Email
           </label>
         )}
         <input
